@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,6 +16,10 @@ public class FPSController : MonoBehaviour
     RaycastHit hit;
     [SerializeField]
     private Slider Health;
+    public AudioSource music;
+    public AudioSource gun;
+    int score = 00000;
+    public TextMeshProUGUI scoreboard;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +28,7 @@ public class FPSController : MonoBehaviour
         // Lock cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        music.Play(60);
     }
 
     // Update is called once per frame
@@ -41,13 +47,18 @@ public class FPSController : MonoBehaviour
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward), Color.green, 2);
             Debug.Log("Shoot!");
             Debug.Log(hit.transform.tag);
-            if(hit.transform.tag == "Target")
+            gun.Play(0);
+            if (hit.transform.tag == "Target")
             {
                 Health.value += 0.05f;
                 Target target = hit.transform.GetComponent<Target>();
                 target.Perish();
+                score += 15;
+                
             }
         }
         Health.value -= 0.0001f;
+        scoreboard.text = score.ToString(); 
+
     }
 }
